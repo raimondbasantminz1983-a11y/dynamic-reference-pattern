@@ -2,10 +2,13 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport"
+  content="width=device-width, initial-scale=1.0"/>
+
   <title>Dynamic Reference Pattern</title>
 
   <style>
+
     body{
       background:#000;
       color:white;
@@ -16,6 +19,11 @@
 
     h1{
       text-align:center;
+      margin-bottom:20px;
+    }
+
+    .topbar{
+      margin-bottom:20px;
     }
 
     .container{
@@ -26,7 +34,8 @@
 
     @media(min-width:900px){
       .container{
-        grid-template-columns:1fr 1fr 1fr;
+        grid-template-columns:
+        1fr 1fr 1fr;
       }
     }
 
@@ -37,24 +46,32 @@
       padding:15px;
     }
 
-    textarea,input{
+    textarea,
+    input{
       width:100%;
-      padding:10px;
+      padding:12px;
       margin-top:10px;
       background:#222;
       color:white;
       border:none;
       border-radius:10px;
+      box-sizing:border-box;
+    }
+
+    textarea{
+      min-height:120px;
+      resize:vertical;
     }
 
     button{
       width:100%;
-      padding:10px;
+      padding:12px;
       margin-top:10px;
       border:none;
       border-radius:10px;
       font-weight:bold;
       cursor:pointer;
+      font-size:15px;
     }
 
     .white{
@@ -62,11 +79,37 @@
       color:black;
     }
 
+    .blue{
+      background:#0066ff;
+      color:white;
+    }
+
+    .green{
+      background:#00aa44;
+      color:white;
+    }
+
+    .red{
+      background:red;
+      color:white;
+    }
+
     .item{
       background:#222;
-      padding:10px;
+      padding:12px;
       border-radius:10px;
       margin-top:10px;
+      word-wrap:break-word;
+    }
+
+    .status-match{
+      color:lime;
+      font-weight:bold;
+    }
+
+    .status-mismatch{
+      color:orange;
+      font-weight:bold;
     }
 
   </style>
@@ -75,7 +118,8 @@
 <body>
 
 <h1>Dynamic Reference Pattern</h1>
-<div style="margin-bottom:20px;">
+
+<div class="topbar">
 
   <input
     id="searchInput"
@@ -99,40 +143,82 @@
 
 <div class="container">
 
+  <!-- A -->
   <div class="box">
+
     <h2>A — Full Story</h2>
 
-    <textarea id="storyInput" placeholder="Write full story..."></textarea>
+    <textarea
+      id="storyInput"
+      placeholder="Write full story..."
+    ></textarea>
 
-    <button class="white" onclick="addStory()">
+    <button
+      class="blue"
+      onclick="startVoice('storyInput')">
+      🎤 Voice Story
+    </button>
+
+    <button
+      class="white"
+      onclick="addStory()">
       Add Story
     </button>
 
     <div id="storyList"></div>
+
   </div>
 
+  <!-- B -->
   <div class="box">
+
     <h2>B — Match Points</h2>
 
-    <input id="pointInput" placeholder="Write point..." />
+    <input
+      id="pointInput"
+      placeholder="Write point..."
+    />
 
-    <button class="white" onclick="addPoint()">
+    <button
+      class="blue"
+      onclick="startVoice('pointInput')">
+      🎤 Voice Point
+    </button>
+
+    <button
+      class="white"
+      onclick="addPoint()">
       Add Point
     </button>
 
     <div id="pointList"></div>
+
   </div>
 
+  <!-- C -->
   <div class="box">
+
     <h2>C — New Ideas</h2>
 
-    <input id="ideaInput" placeholder="Write new idea..." />
+    <input
+      id="ideaInput"
+      placeholder="Write new idea..."
+    />
 
-    <button class="white" onclick="addIdea()">
+    <button
+      class="blue"
+      onclick="startVoice('ideaInput')">
+      🎤 Voice Idea
+    </button>
+
+    <button
+      class="white"
+      onclick="addIdea()">
       Add Idea
     </button>
 
     <div id="ideaList"></div>
+
   </div>
 
 </div>
@@ -140,13 +226,19 @@
 <script>
 
 let stories =
-JSON.parse(localStorage.getItem("stories")) || [];
+JSON.parse(
+localStorage.getItem("stories")
+) || [];
 
 let points =
-JSON.parse(localStorage.getItem("points")) || [];
+JSON.parse(
+localStorage.getItem("points")
+) || [];
 
 let ideas =
-JSON.parse(localStorage.getItem("ideas")) || [];
+JSON.parse(
+localStorage.getItem("ideas")
+) || [];
 
 function saveData(){
 
@@ -182,14 +274,16 @@ function highlightMatches(text){
     result =
     result.replace(
       regex,
+
       `<mark style="
-      background:lime;
-      color:black;
-      padding:2px;
-      border-radius:4px;
+        background:lime;
+        color:black;
+        padding:2px;
+        border-radius:4px;
       ">
       ${word}
       </mark>`
+
     );
 
   });
@@ -200,7 +294,9 @@ function highlightMatches(text){
 function addStory(){
 
   const input =
-  document.getElementById("storyInput");
+  document.getElementById(
+    "storyInput"
+  );
 
   if(!input.value.trim()) return;
 
@@ -216,19 +312,29 @@ function addStory(){
 function addPoint(){
 
   const input =
-  document.getElementById("pointInput");
+  document.getElementById(
+    "pointInput"
+  );
 
   if(!input.value.trim()) return;
 
   const match =
   stories.some(s =>
     s.toLowerCase()
-    .includes(input.value.toLowerCase())
+    .includes(
+      input.value.toLowerCase()
+    )
   );
 
   points.push({
-    text: input.value,
-    type: match ? "MATCH" : "MISMATCH"
+
+    text:input.value,
+
+    type:
+    match
+    ? "MATCH"
+    : "MISMATCH"
+
   });
 
   saveData();
@@ -243,7 +349,9 @@ function addPoint(){
 function addIdea(){
 
   const input =
-  document.getElementById("ideaInput");
+  document.getElementById(
+    "ideaInput"
+  );
 
   if(!input.value.trim()) return;
 
@@ -258,7 +366,9 @@ function addIdea(){
 
 function moveIdeaToStory(index){
 
-  stories.push(ideas[index]);
+  stories.push(
+    ideas[index]
+  );
 
   ideas.splice(index,1);
 
@@ -271,17 +381,26 @@ function moveIdeaToStory(index){
 
 function moveIdeaToPoints(index){
 
-  const text = ideas[index];
+  const text =
+  ideas[index];
 
   const match =
   stories.some(s =>
     s.toLowerCase()
-    .includes(text.toLowerCase())
+    .includes(
+      text.toLowerCase()
+    )
   );
 
   points.push({
+
     text,
-    type: match ? "MATCH" : "MISMATCH"
+
+    type:
+    match
+    ? "MATCH"
+    : "MISMATCH"
+
   });
 
   ideas.splice(index,1);
@@ -327,130 +446,141 @@ function deleteIdea(index){
 function renderStories(){
 
   const list =
-  document.getElementById("storyList");
+  document.getElementById(
+    "storyList"
+  );
 
   list.innerHTML = "";
 
   stories.forEach((s,index)=>{
 
     list.innerHTML += `
+
       <div class="item">
 
         <div>
-        ${highlightMatches(s)}
+          ${highlightMatches(s)}
         </div>
 
         <button
-        onclick="deleteStory(${index})"
-        style="
-        margin-top:10px;
-        background:red;
-        color:white;">
-        Delete
+          class="red"
+          onclick="
+          deleteStory(${index})
+          ">
+          Delete
         </button>
 
       </div>
+
     `;
+
   });
+
 }
 
 function renderPoints(){
 
   const list =
-  document.getElementById("pointList");
+  document.getElementById(
+    "pointList"
+  );
 
   list.innerHTML = "";
 
   points.forEach((p,index)=>{
 
     list.innerHTML += `
+
       <div class="item">
 
         ${p.text}
 
         <br><br>
 
-        <b style="
-        color:
-        ${p.type==="MATCH"
-          ?"lime"
-          :"orange"}">
-
-        ${p.type}
-
-        </b>
+        <span class="
+        ${
+          p.type==="MATCH"
+          ? "status-match"
+          : "status-mismatch"
+        }
+        ">
+          ${p.type}
+        </span>
 
         <button
-        onclick="deletePoint(${index})"
-        style="
-        margin-top:10px;
-        background:red;
-        color:white;">
-        Delete
+          class="red"
+          onclick="
+          deletePoint(${index})
+          ">
+          Delete
         </button>
 
       </div>
+
     `;
+
   });
+
 }
 
 function renderIdeas(){
 
   const list =
-  document.getElementById("ideaList");
+  document.getElementById(
+    "ideaList"
+  );
 
   list.innerHTML = "";
 
   ideas.forEach((i,index)=>{
 
     list.innerHTML += `
+
       <div class="item">
 
         ${i}
 
         <button
-        onclick="moveIdeaToStory(${index})"
-        style="
-        margin-top:10px;
-        background:blue;
-        color:white;">
-        Send To A
+          class="blue"
+          onclick="
+          moveIdeaToStory(${index})
+          ">
+          Send To A
         </button>
 
         <button
-        onclick="moveIdeaToPoints(${index})"
-        style="
-        margin-top:10px;
-        background:green;
-        color:white;">
-        Send To B
+          class="green"
+          onclick="
+          moveIdeaToPoints(${index})
+          ">
+          Send To B
         </button>
 
         <button
-        onclick="deleteIdea(${index})"
-        style="
-        margin-top:10px;
-        background:red;
-        color:white;">
-        Delete
+          class="red"
+          onclick="
+          deleteIdea(${index})
+          ">
+          Delete
         </button>
 
       </div>
+
     `;
+
   });
+
 }
 
-renderStories();
-
-renderPoints();
-
-renderIdeas();
 function searchAll(){
 
   const value =
-  document.getElementById(
+  document
+  .getElementById(
     "searchInput"
-  ).value.toLowerCase();
+  )
+  .value
+  .toLowerCase();
 
   document
   .querySelectorAll(".item")
@@ -461,9 +591,15 @@ function searchAll(){
       .toLowerCase()
       .includes(value)
     ){
-      item.style.display="block";
+
+      item.style.display =
+      "block";
+
     }else{
-      item.style.display="none";
+
+      item.style.display =
+      "none";
+
     }
 
   });
@@ -472,29 +608,43 @@ function searchAll(){
 
 function exportTXT(){
 
-  let text = "=== STORIES ===\n\n";
+  let text =
+  "=== STORIES ===\n\n";
 
   stories.forEach(s=>{
-    text += s + "\n\n";
+
+    text +=
+    s + "\n\n";
+
   });
 
-  text += "\n=== POINTS ===\n\n";
+  text +=
+  "\n=== POINTS ===\n\n";
 
   points.forEach(p=>{
+
     text +=
     p.text +
-    " [" + p.type + "]\n";
+    " [" +
+    p.type +
+    "]\n";
+
   });
 
-  text += "\n=== IDEAS ===\n\n";
+  text +=
+  "\n=== IDEAS ===\n\n";
 
   ideas.forEach(i=>{
+
     text += i + "\n";
+
   });
 
   const blob =
-  new Blob([text],
-  {type:"text/plain"});
+  new Blob(
+    [text],
+    {type:"text/plain"}
+  );
 
   const a =
   document.createElement("a");
@@ -511,15 +661,29 @@ function exportTXT(){
 function exportJSON(){
 
   const data = {
+
     stories,
     points,
     ideas
+
   };
 
   const blob =
   new Blob(
-    [JSON.stringify(data,null,2)],
-    {type:"application/json"}
+
+    [
+      JSON.stringify(
+        data,
+        null,
+        2
+      )
+    ],
+
+    {
+      type:
+      "application/json"
+    }
+
   );
 
   const a =
@@ -533,6 +697,50 @@ function exportJSON(){
 
   a.click();
 }
+
+function startVoice(inputId){
+
+  if(
+    !(
+      'webkitSpeechRecognition'
+      in window
+    )
+  ){
+
+    alert(
+      "Voice recognition not supported"
+    );
+
+    return;
+  }
+
+  const recognition =
+  new webkitSpeechRecognition();
+
+  recognition.lang =
+  "hi-IN";
+
+  recognition.start();
+
+  recognition.onresult =
+  function(event){
+
+    const text =
+
+    event.results[0][0]
+    .transcript;
+
+    document
+    .getElementById(inputId)
+    .value += text;
+
+  };
+
+}
+
+renderStories();
+renderPoints();
+renderIdeas();
 
 </script>
 
