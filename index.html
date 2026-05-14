@@ -75,6 +75,27 @@
 <body>
 
 <h1>Dynamic Reference Pattern</h1>
+<div style="margin-bottom:20px;">
+
+  <input
+    id="searchInput"
+    placeholder="Search everything..."
+    onkeyup="searchAll()"
+  />
+
+  <button
+    class="white"
+    onclick="exportTXT()">
+    Export TXT
+  </button>
+
+  <button
+    class="white"
+    onclick="exportJSON()">
+    Export JSON
+  </button>
+
+</div>
 
 <div class="container">
 
@@ -424,6 +445,94 @@ renderStories();
 renderPoints();
 
 renderIdeas();
+function searchAll(){
+
+  const value =
+  document.getElementById(
+    "searchInput"
+  ).value.toLowerCase();
+
+  document
+  .querySelectorAll(".item")
+  .forEach(item=>{
+
+    if(
+      item.innerText
+      .toLowerCase()
+      .includes(value)
+    ){
+      item.style.display="block";
+    }else{
+      item.style.display="none";
+    }
+
+  });
+
+}
+
+function exportTXT(){
+
+  let text = "=== STORIES ===\n\n";
+
+  stories.forEach(s=>{
+    text += s + "\n\n";
+  });
+
+  text += "\n=== POINTS ===\n\n";
+
+  points.forEach(p=>{
+    text +=
+    p.text +
+    " [" + p.type + "]\n";
+  });
+
+  text += "\n=== IDEAS ===\n\n";
+
+  ideas.forEach(i=>{
+    text += i + "\n";
+  });
+
+  const blob =
+  new Blob([text],
+  {type:"text/plain"});
+
+  const a =
+  document.createElement("a");
+
+  a.href =
+  URL.createObjectURL(blob);
+
+  a.download =
+  "dynamic-reference-pattern.txt";
+
+  a.click();
+}
+
+function exportJSON(){
+
+  const data = {
+    stories,
+    points,
+    ideas
+  };
+
+  const blob =
+  new Blob(
+    [JSON.stringify(data,null,2)],
+    {type:"application/json"}
+  );
+
+  const a =
+  document.createElement("a");
+
+  a.href =
+  URL.createObjectURL(blob);
+
+  a.download =
+  "dynamic-reference-pattern.json";
+
+  a.click();
+}
 
 </script>
 
