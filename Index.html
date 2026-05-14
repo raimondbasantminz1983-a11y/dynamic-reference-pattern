@@ -1,16 +1,232 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Dynamic Reference Pattern</title>
+
+  <style>
+    body{
+      background:#000;
+      color:white;
+      font-family:sans-serif;
+      margin:0;
+      padding:20px;
+    }
+
+    h1{
+      text-align:center;
+    }
+
+    .container{
+      display:grid;
+      grid-template-columns:1fr;
+      gap:20px;
+    }
+
+    @media(min-width:900px){
+      .container{
+        grid-template-columns:1fr 1fr 1fr;
+      }
+    }
+
+    .box{
+      background:#111;
+      border:1px solid #333;
+      border-radius:20px;
+      padding:15px;
+    }
+
+    textarea,input{
+      width:100%;
+      padding:10px;
+      margin-top:10px;
+      background:#222;
+      color:white;
+      border:none;
+      border-radius:10px;
+    }
+
+    button{
+      width:100%;
+      padding:10px;
+      margin-top:10px;
+      border:none;
+      border-radius:10px;
+      font-weight:bold;
+      cursor:pointer;
+    }
+
+    .white{
+      background:white;
+      color:black;
+    }
+
+    .item{
+      background:#222;
+      padding:10px;
+      border-radius:10px;
+      margin-top:10px;
+    }
+
+  </style>
 </head>
 
-<body style="background:black;color:white;font-family:sans-serif;padding:20px;">
+<body>
 
 <h1>Dynamic Reference Pattern</h1>
 
-<p>A = Full Story</p>
-<p>B = Match Points</p>
-<p>C = New Ideas</p>
+<div class="container">
+
+  <div class="box">
+    <h2>A — Full Story</h2>
+
+    <textarea id="storyInput" placeholder="Write full story..."></textarea>
+
+    <button class="white" onclick="addStory()">
+      Add Story
+    </button>
+
+    <div id="storyList"></div>
+  </div>
+
+  <div class="box">
+    <h2>B — Match Points</h2>
+
+    <input id="pointInput" placeholder="Write point..." />
+
+    <button class="white" onclick="addPoint()">
+      Add Point
+    </button>
+
+    <div id="pointList"></div>
+  </div>
+
+  <div class="box">
+    <h2>C — New Ideas</h2>
+
+    <input id="ideaInput" placeholder="Write new idea..." />
+
+    <button class="white" onclick="addIdea()">
+      Add Idea
+    </button>
+
+    <div id="ideaList"></div>
+  </div>
+
+</div>
+
+<script>
+
+let stories = [];
+let points = [];
+let ideas = [];
+
+function addStory(){
+
+  const input =
+    document.getElementById("storyInput");
+
+  if(!input.value) return;
+
+  stories.push(input.value);
+
+  renderStories();
+
+  input.value = "";
+}
+
+function addPoint(){
+
+  const input =
+    document.getElementById("pointInput");
+
+  if(!input.value) return;
+
+  const match =
+    stories.some(s =>
+      s.toLowerCase()
+      .includes(input.value.toLowerCase())
+    );
+
+  points.push({
+    text: input.value,
+    type: match ? "MATCH" : "MISMATCH"
+  });
+
+  renderPoints();
+
+  input.value = "";
+}
+
+function addIdea(){
+
+  const input =
+    document.getElementById("ideaInput");
+
+  if(!input.value) return;
+
+  ideas.push(input.value);
+
+  renderIdeas();
+
+  input.value = "";
+}
+
+function renderStories(){
+
+  const list =
+    document.getElementById("storyList");
+
+  list.innerHTML = "";
+
+  stories.forEach(s => {
+
+    list.innerHTML += `
+      <div class="item">
+        ${s}
+      </div>
+    `;
+  });
+}
+
+function renderPoints(){
+
+  const list =
+    document.getElementById("pointList");
+
+  list.innerHTML = "";
+
+  points.forEach(p => {
+
+    list.innerHTML += `
+      <div class="item">
+        ${p.text}
+        <br><br>
+        ${p.type}
+      </div>
+    `;
+  });
+}
+
+function renderIdeas(){
+
+  const list =
+    document.getElementById("ideaList");
+
+  list.innerHTML = "";
+
+  ideas.forEach(i => {
+
+    list.innerHTML += `
+      <div class="item">
+        ${i}
+      </div>
+    `;
+  });
+}
+
+</script>
 
 </body>
 </html>
