@@ -1,118 +1,127 @@
-<!DOCTYPE html>
+E html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport"
-  content="width=device-width, initial-scale=1.0"/>
+<meta charset="UTF-8" />
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0"/>
 
-  <title>Dynamic Reference Pattern</title>
+<title>Dynamic Reference Pattern</title>
 
-  <style>
+<style>
 
-    body{
-      background:#000;
-      color:white;
-      font-family:sans-serif;
-      margin:0;
-      padding:20px;
-    }
+body{
+  background:#000;
+  color:white;
+  font-family:sans-serif;
+  margin:0;
+  padding:20px;
+}
 
-    h1{
-      text-align:center;
-      margin-bottom:20px;
-    }
+h1{
+  text-align:center;
+  margin-bottom:20px;
+}
 
-    .topbar{
-      margin-bottom:20px;
-    }
+.topbar{
+  margin-bottom:20px;
+}
 
-    .container{
-      display:grid;
-      grid-template-columns:1fr;
-      gap:20px;
-    }
+.container{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:20px;
+}
 
-    @media(min-width:900px){
-      .container{
-        grid-template-columns:
-        1fr 1fr 1fr;
-      }
-    }
+@media(min-width:900px){
 
-    .box{
-      background:#111;
-      border:1px solid #333;
-      border-radius:20px;
-      padding:15px;
-    }
+  .container{
+    grid-template-columns:
+    1fr 1fr 1fr;
+  }
 
-    textarea,
-    input{
-      width:100%;
-      padding:12px;
-      margin-top:10px;
-      background:#222;
-      color:white;
-      border:none;
-      border-radius:10px;
-      box-sizing:border-box;
-    }
+}
 
-    textarea{
-      min-height:120px;
-      resize:vertical;
-    }
+.box{
+  background:#111;
+  border:1px solid #333;
+  border-radius:20px;
+  padding:15px;
+}
 
-    button{
-      width:100%;
-      padding:12px;
-      margin-top:10px;
-      border:none;
-      border-radius:10px;
-      font-weight:bold;
-      cursor:pointer;
-      font-size:15px;
-    }
+textarea,
+input{
+  width:100%;
+  padding:12px;
+  margin-top:10px;
+  background:#222;
+  color:white;
+  border:none;
+  border-radius:10px;
+  box-sizing:border-box;
+}
 
-    .white{
-      background:white;
-      color:black;
-    }
+textarea{
+  min-height:120px;
+  resize:vertical;
+}
 
-    .blue{
-      background:#0066ff;
-      color:white;
-    }
+button{
+  width:100%;
+  padding:12px;
+  margin-top:10px;
+  border:none;
+  border-radius:10px;
+  font-weight:bold;
+  cursor:pointer;
+  font-size:15px;
+}
 
-    .green{
-      background:#00aa44;
-      color:white;
-    }
+.white{
+  background:white;
+  color:black;
+}
 
-    .red{
-      background:red;
-      color:white;
-    }
+.blue{
+  background:#0066ff;
+  color:white;
+}
 
-    .item{
-      background:#222;
-      padding:12px;
-      border-radius:10px;
-      margin-top:10px;
-      word-wrap:break-word;
-    }
+.green{
+  background:#00aa44;
+  color:white;
+}
 
-    .status-match{
-      color:lime;
-      font-weight:bold;
-    }
+.red{
+  background:red;
+  color:white;
+}
 
-    .status-mismatch{
-      color:orange;
-      font-weight:bold;
-    }
+.item{
+  background:#222;
+  padding:12px;
+  border-radius:10px;
+  margin-top:10px;
+  word-wrap:break-word;
+}
 
-  </style>
+.status-match{
+  color:lime;
+  font-weight:bold;
+}
+
+.status-mismatch{
+  color:orange;
+  font-weight:bold;
+}
+
+mark{
+  background:lime;
+  color:black;
+  padding:2px;
+  border-radius:4px;
+}
+
+</style>
 </head>
 
 <body>
@@ -121,105 +130,105 @@
 
 <div class="topbar">
 
-  <input
-    id="searchInput"
-    placeholder="Search everything..."
-    onkeyup="searchAll()"
-  />
+<input
+id="searchInput"
+placeholder="Search everything..."
+onkeyup="searchAll()"
+/>
 
-  <button
-    class="white"
-    onclick="exportTXT()">
-    Export TXT
-  </button>
+<button
+class="white"
+onclick="exportTXT()">
+Export TXT
+</button>
 
-  <button
-    class="white"
-    onclick="exportJSON()">
-    Export JSON
-  </button>
+<button
+class="white"
+onclick="exportJSON()">
+Export JSON
+</button>
 
 </div>
 
 <div class="container">
 
-  <!-- A -->
-  <div class="box">
+<!-- A -->
+<div class="box">
 
-    <h2>A — Full Story</h2>
+<h2>A — Full Story</h2>
 
-    <textarea
-      id="storyInput"
-      placeholder="Write full story..."
-    ></textarea>
+<textarea
+id="storyInput"
+placeholder="Write full story..."
+></textarea>
 
-    <button
-      class="blue"
-      onclick="startVoice('storyInput')">
-      🎤 Voice Story
-    </button>
+<button
+class="blue"
+onclick="startVoice('storyInput')">
+🎤 Voice Story
+</button>
 
-    <button
-      class="white"
-      onclick="addStory()">
-      Add Story
-    </button>
+<button
+class="white"
+onclick="addStory()">
+Add Story
+</button>
 
-    <div id="storyList"></div>
+<div id="storyList"></div>
 
-  </div>
+</div>
 
-  <!-- B -->
-  <div class="box">
+<!-- B -->
+<div class="box">
 
-    <h2>B — Match Points</h2>
+<h2>B — Match Points</h2>
 
-    <input
-      id="pointInput"
-      placeholder="Write point..."
-    />
+<input
+id="pointInput"
+placeholder="Write point..."
+/>
 
-    <button
-      class="blue"
-      onclick="startVoice('pointInput')">
-      🎤 Voice Point
-    </button>
+<button
+class="blue"
+onclick="startVoice('pointInput')">
+🎤 Voice Point
+</button>
 
-    <button
-      class="white"
-      onclick="addPoint()">
-      Add Point
-    </button>
+<button
+class="white"
+onclick="addPoint()">
+Add Point
+</button>
 
-    <div id="pointList"></div>
+<div id="pointList"></div>
 
-  </div>
+</div>
 
-  <!-- C -->
-  <div class="box">
+<!-- C -->
+<div class="box">
 
-    <h2>C — New Ideas</h2>
+<h2>C — New Ideas</h2>
 
-    <input
-      id="ideaInput"
-      placeholder="Write new idea..."
-    />
+<input
+id="ideaInput"
+placeholder="Write new idea..."
+/>
 
-    <button
-      class="blue"
-      onclick="startVoice('ideaInput')">
-      🎤 Voice Idea
-    </button>
+<button
+class="blue"
+onclick="startVoice('ideaInput')">
+🎤 Voice Idea
+</button>
 
-    <button
-      class="white"
-      onclick="addIdea()">
-      Add Idea
-    </button>
+<button
+class="white"
+onclick="addIdea()">
+Add Idea
+</button>
 
-    <div id="ideaList"></div>
+<div id="ideaList"></div>
 
-  </div>
+</div>
 
 </div>
 
@@ -256,6 +265,46 @@ function saveData(){
     "ideas",
     JSON.stringify(ideas)
   );
+
+  showSaveStatus();
+}
+
+function showSaveStatus(){
+
+  let old =
+  document.getElementById(
+    "saveStatus"
+  );
+
+  if(old){
+    old.remove();
+  }
+
+  const box =
+  document.createElement("div");
+
+  box.id = "saveStatus";
+
+  box.innerText =
+  "✔ Auto Saved";
+
+  box.style.position = "fixed";
+  box.style.bottom = "20px";
+  box.style.right = "20px";
+  box.style.background = "lime";
+  box.style.color = "black";
+  box.style.padding = "10px 15px";
+  box.style.borderRadius = "10px";
+  box.style.fontWeight = "bold";
+  box.style.zIndex = "9999";
+
+  document.body.appendChild(box);
+
+  setTimeout(()=>{
+
+    box.remove();
+
+  },1200);
 }
 
 function highlightMatches(text){
@@ -274,16 +323,7 @@ function highlightMatches(text){
     result =
     result.replace(
       regex,
-
-      `<mark style="
-        background:lime;
-        color:black;
-        padding:2px;
-        border-radius:4px;
-      ">
-      ${word}
-      </mark>`
-
+      `<mark>${word}</mark>`
     );
 
   });
@@ -319,7 +359,7 @@ function addPoint(){
   if(!input.value.trim()) return;
 
   const match =
-  stories.some(s =>
+  stories.some(s=>
     s.toLowerCase()
     .includes(
       input.value.toLowerCase()
@@ -385,7 +425,7 @@ function moveIdeaToPoints(index){
   ideas[index];
 
   const match =
-  stories.some(s =>
+  stories.some(s=>
     s.toLowerCase()
     .includes(
       text.toLowerCase()
@@ -456,21 +496,21 @@ function renderStories(){
 
     list.innerHTML += `
 
-      <div class="item">
+    <div class="item">
 
-        <div>
-          ${highlightMatches(s)}
-        </div>
-
-        <button
-          class="red"
-          onclick="
-          deleteStory(${index})
-          ">
-          Delete
-        </button>
-
+      <div>
+      ${highlightMatches(s)}
       </div>
+
+      <button
+      class="red"
+      onclick="
+      deleteStory(${index})
+      ">
+      Delete
+      </button>
+
+    </div>
 
     `;
 
@@ -491,31 +531,33 @@ function renderPoints(){
 
     list.innerHTML += `
 
-      <div class="item">
+    <div class="item">
 
-        ${p.text}
+      ${p.text}
 
-        <br><br>
+      <br><br>
 
-        <span class="
-        ${
-          p.type==="MATCH"
-          ? "status-match"
-          : "status-mismatch"
-        }
-        ">
-          ${p.type}
-        </span>
+      <span class="
+      ${
+        p.type==="MATCH"
+        ? "status-match"
+        : "status-mismatch"
+      }
+      ">
 
-        <button
-          class="red"
-          onclick="
-          deletePoint(${index})
-          ">
-          Delete
-        </button>
+      ${p.type}
 
-      </div>
+      </span>
+
+      <button
+      class="red"
+      onclick="
+      deletePoint(${index})
+      ">
+      Delete
+      </button>
+
+    </div>
 
     `;
 
@@ -536,35 +578,35 @@ function renderIdeas(){
 
     list.innerHTML += `
 
-      <div class="item">
+    <div class="item">
 
-        ${i}
+      ${i}
 
-        <button
-          class="blue"
-          onclick="
-          moveIdeaToStory(${index})
-          ">
-          Send To A
-        </button>
+      <button
+      class="blue"
+      onclick="
+      moveIdeaToStory(${index})
+      ">
+      Send To A
+      </button>
 
-        <button
-          class="green"
-          onclick="
-          moveIdeaToPoints(${index})
-          ">
-          Send To B
-        </button>
+      <button
+      class="green"
+      onclick="
+      moveIdeaToPoints(${index})
+      ">
+      Send To B
+      </button>
 
-        <button
-          class="red"
-          onclick="
-          deleteIdea(${index})
-          ">
-          Delete
-        </button>
+      <button
+      class="red"
+      onclick="
+      deleteIdea(${index})
+      ">
+      Delete
+      </button>
 
-      </div>
+    </div>
 
     `;
 
@@ -613,8 +655,7 @@ function exportTXT(){
 
   stories.forEach(s=>{
 
-    text +=
-    s + "\n\n";
+    text += s + "\n\n";
 
   });
 
@@ -726,7 +767,6 @@ function startVoice(inputId){
   function(event){
 
     const text =
-
     event.results[0][0]
     .transcript;
 
