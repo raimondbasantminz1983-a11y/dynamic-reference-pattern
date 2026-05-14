@@ -145,6 +145,37 @@ function saveData(){
   );
 }
 
+function highlightMatches(text){
+
+  let result = text;
+
+  points.forEach((p)=>{
+
+    const word = p.text;
+
+    if(!word) return;
+
+    const regex =
+    new RegExp(word,"gi");
+
+    result =
+    result.replace(
+      regex,
+      `<mark style="
+      background:lime;
+      color:black;
+      padding:2px;
+      border-radius:4px;
+      ">
+      ${word}
+      </mark>`
+    );
+
+  });
+
+  return result;
+}
+
 function addStory(){
 
   const input =
@@ -182,6 +213,8 @@ function addPoint(){
   saveData();
 
   renderPoints();
+
+  renderStories();
 
   input.value = "";
 }
@@ -236,6 +269,8 @@ function moveIdeaToPoints(index){
 
   renderPoints();
 
+  renderStories();
+
   renderIdeas();
 }
 
@@ -255,6 +290,8 @@ function deletePoint(index){
   saveData();
 
   renderPoints();
+
+  renderStories();
 }
 
 function deleteIdea(index){
@@ -278,7 +315,9 @@ function renderStories(){
     list.innerHTML += `
       <div class="item">
 
-        ${s}
+        <div>
+        ${highlightMatches(s)}
+        </div>
 
         <button
         onclick="deleteStory(${index})"
