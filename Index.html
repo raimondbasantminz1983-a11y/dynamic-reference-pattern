@@ -1,251 +1,232 @@
-export default function DynamicReferencePatternApp() { const React = window.React; const { useState } = React;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dynamic Reference Pattern</title>
 
-const [story, setStory] = useState([]); const [points, setPoints] = useState([]); const [ideas, setIdeas] = useState([]);
+  <style>
+    body{
+      background:#000;
+      color:white;
+      font-family:sans-serif;
+      margin:0;
+      padding:20px;
+    }
 
-const [storyInput, setStoryInput] = useState(""); const [pointInput, setPointInput] = useState(""); const [ideaInput, setIdeaInput] = useState("");
+    h1{
+      text-align:center;
+    }
 
-function addStory() { if (!storyInput.trim()) return;
+    .container{
+      display:grid;
+      grid-template-columns:1fr;
+      gap:20px;
+    }
 
-setStory([
-  ...story,
-  {
-    id: Date.now(),
-    text: storyInput,
-  },
-]);
+    @media(min-width:900px){
+      .container{
+        grid-template-columns:1fr 1fr 1fr;
+      }
+    }
 
-setStoryInput("");
+    .box{
+      background:#111;
+      border:1px solid #333;
+      border-radius:20px;
+      padding:15px;
+    }
 
-}
+    textarea,input{
+      width:100%;
+      padding:10px;
+      margin-top:10px;
+      background:#222;
+      color:white;
+      border:none;
+      border-radius:10px;
+    }
 
-function addPoint() { if (!pointInput.trim()) return;
+    button{
+      width:100%;
+      padding:10px;
+      margin-top:10px;
+      border:none;
+      border-radius:10px;
+      font-weight:bold;
+      cursor:pointer;
+    }
 
-const match = story.some((item) =>
-  item.text.toLowerCase().includes(pointInput.toLowerCase())
-);
+    .white{
+      background:white;
+      color:black;
+    }
 
-setPoints([
-  ...points,
-  {
-    id: Date.now(),
-    text: pointInput,
-    type: match ? "MATCH" : "MISMATCH",
-  },
-]);
+    .item{
+      background:#222;
+      padding:10px;
+      border-radius:10px;
+      margin-top:10px;
+    }
 
-setPointInput("");
+  </style>
+</head>
 
-}
+<body>
 
-function addIdea() { if (!ideaInput.trim()) return;
+<h1>Dynamic Reference Pattern</h1>
 
-setIdeas([
-  ...ideas,
-  {
-    id: Date.now(),
-    text: ideaInput,
-  },
-]);
+<div class="container">
 
-setIdeaInput("");
+  <div class="box">
+    <h2>A — Full Story</h2>
 
-}
+    <textarea id="storyInput" placeholder="Write full story..."></textarea>
 
-function moveIdeaToStory(item) { setStory([ ...story, { id: Date.now(), text: item.text, }, ]); }
+    <button class="white" onclick="addStory()">
+      Add Story
+    </button>
 
-function moveIdeaToPoints(item) { const match = story.some((s) => s.text.toLowerCase().includes(item.text.toLowerCase()) );
-
-setPoints([
-  ...points,
-  {
-    id: Date.now(),
-    text: item.text,
-    type: match ? "MATCH" : "MISMATCH",
-  },
-]);
-
-}
-
-function deleteItem(id, type) { if (type === "story") { setStory(story.filter((x) => x.id !== id)); }
-
-if (type === "points") {
-  setPoints(points.filter((x) => x.id !== id));
-}
-
-if (type === "ideas") {
-  setIdeas(ideas.filter((x) => x.id !== id));
-}
-
-}
-
-return ( <div className="min-h-screen bg-black text-white p-4"> <div className="max-w-7xl mx-auto"> <h1 className="text-4xl font-bold text-center mb-2"> Dynamic Reference Pattern </h1>
-
-<p className="text-center text-gray-400 mb-8">
-      A = Full Story | B = Match Points | C = New Ideas
-    </p>
-
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-      {/* A */}
-      <div className="bg-zinc-900 rounded-3xl p-4 border border-zinc-700">
-        <h2 className="text-2xl font-bold mb-2">A — Full Story</h2>
-
-        <p className="text-sm text-gray-400 mb-4">
-          Main memory / complete story / full context
-        </p>
-
-        <textarea
-          value={storyInput}
-          onChange={(e) => setStoryInput(e.target.value)}
-          placeholder="Write full story..."
-          className="w-full h-28 bg-zinc-800 rounded-2xl p-3 outline-none mb-3"
-        />
-
-        <button
-          onClick={addStory}
-          className="w-full bg-white text-black rounded-2xl p-3 font-bold mb-4"
-        >
-          Add Story
-        </button>
-
-        <div className="space-y-3 max-h-[500px] overflow-auto">
-          {story.map((item) => (
-            <div
-              key={item.id}
-              className="bg-zinc-800 rounded-2xl p-3"
-            >
-              <div className="whitespace-pre-wrap">{item.text}</div>
-
-              <button
-                onClick={() => deleteItem(item.id, "story")}
-                className="mt-3 text-sm bg-red-500 px-3 py-1 rounded-xl"
-              >
-                Delete
-              </button>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* B */}
-      <div className="bg-zinc-900 rounded-3xl p-4 border border-zinc-700">
-        <h2 className="text-2xl font-bold mb-2">B — Match Points</h2>
-
-        <p className="text-sm text-gray-400 mb-4">
-          Keywords / references / match checking
-        </p>
-
-        <input
-          value={pointInput}
-          onChange={(e) => setPointInput(e.target.value)}
-          placeholder="Write point..."
-          className="w-full bg-zinc-800 rounded-2xl p-3 outline-none mb-3"
-        />
-
-        <button
-          onClick={addPoint}
-          className="w-full bg-white text-black rounded-2xl p-3 font-bold mb-4"
-        >
-          Add Point
-        </button>
-
-        <div className="space-y-3 max-h-[500px] overflow-auto">
-          {points.map((item) => (
-            <div
-              key={item.id}
-              className="bg-zinc-800 rounded-2xl p-3"
-            >
-              <div>{item.text}</div>
-
-              <div className="mt-2 text-sm">
-                Status:
-                <span
-                  className={`ml-2 font-bold ${
-                    item.type === "MATCH"
-                      ? "text-green-400"
-                      : "text-yellow-400"
-                  }`}
-                >
-                  {item.type}
-                </span>
-              </div>
-
-              <button
-                onClick={() => deleteItem(item.id, "points")}
-                className="mt-3 text-sm bg-red-500 px-3 py-1 rounded-xl"
-              >
-                Delete
-              </button>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* C */}
-      <div className="bg-zinc-900 rounded-3xl p-4 border border-zinc-700">
-        <h2 className="text-2xl font-bold mb-2">C — New Ideas</h2>
-
-        <p className="text-sm text-gray-400 mb-4">
-          New concepts / discoveries / expansion
-        </p>
-
-        <input
-          value={ideaInput}
-          onChange={(e) => setIdeaInput(e.target.value)}
-          placeholder="Write new idea..."
-          className="w-full bg-zinc-800 rounded-2xl p-3 outline-none mb-3"
-        />
-
-        <button
-          onClick={addIdea}
-          className="w-full bg-white text-black rounded-2xl p-3 font-bold mb-4"
-        >
-          Add Idea
-        </button>
-
-        <div className="space-y-3 max-h-[500px] overflow-auto">
-          {ideas.map((item) => (
-            <div
-              key={item.id}
-              className="bg-zinc-800 rounded-2xl p-3"
-            >
-              <div>{item.text}</div>
-
-              <div className="flex flex-wrap gap-2 mt-3">
-                <button
-                  onClick={() => moveIdeaToStory(item)}
-                  className="bg-blue-500 px-3 py-1 rounded-xl text-sm"
-                >
-                  Send To A
-                </button>
-
-                <button
-                  onClick={() => moveIdeaToPoints(item)}
-                  className="bg-green-500 px-3 py-1 rounded-xl text-sm"
-                >
-                  Send To B
-                </button>
-
-                <button
-                  onClick={() => deleteItem(item.id, "ideas")}
-                  className="bg-red-500 px-3 py-1 rounded-xl text-sm"
-                >
-                  Delete
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-
-    <div className="mt-8 bg-zinc-900 rounded-3xl p-5 border border-zinc-700">
-      <h2 className="text-2xl font-bold mb-4">System Flow</h2>
-
-      <div className="text-gray-300 leading-8">
-        New Idea → C → Match Check → B → Update A
-      </div>
-    </div>
+    <div id="storyList"></div>
   </div>
+
+  <div class="box">
+    <h2>B — Match Points</h2>
+
+    <input id="pointInput" placeholder="Write point..." />
+
+    <button class="white" onclick="addPoint()">
+      Add Point
+    </button>
+
+    <div id="pointList"></div>
+  </div>
+
+  <div class="box">
+    <h2>C — New Ideas</h2>
+
+    <input id="ideaInput" placeholder="Write new idea..." />
+
+    <button class="white" onclick="addIdea()">
+      Add Idea
+    </button>
+
+    <div id="ideaList"></div>
+  </div>
+
 </div>
 
-); }
+<script>
+
+let stories = [];
+let points = [];
+let ideas = [];
+
+function addStory(){
+
+  const input =
+    document.getElementById("storyInput");
+
+  if(!input.value) return;
+
+  stories.push(input.value);
+
+  renderStories();
+
+  input.value = "";
+}
+
+function addPoint(){
+
+  const input =
+    document.getElementById("pointInput");
+
+  if(!input.value) return;
+
+  const match =
+    stories.some(s =>
+      s.toLowerCase()
+      .includes(input.value.toLowerCase())
+    );
+
+  points.push({
+    text: input.value,
+    type: match ? "MATCH" : "MISMATCH"
+  });
+
+  renderPoints();
+
+  input.value = "";
+}
+
+function addIdea(){
+
+  const input =
+    document.getElementById("ideaInput");
+
+  if(!input.value) return;
+
+  ideas.push(input.value);
+
+  renderIdeas();
+
+  input.value = "";
+}
+
+function renderStories(){
+
+  const list =
+    document.getElementById("storyList");
+
+  list.innerHTML = "";
+
+  stories.forEach(s => {
+
+    list.innerHTML += `
+      <div class="item">
+        ${s}
+      </div>
+    `;
+  });
+}
+
+function renderPoints(){
+
+  const list =
+    document.getElementById("pointList");
+
+  list.innerHTML = "";
+
+  points.forEach(p => {
+
+    list.innerHTML += `
+      <div class="item">
+        ${p.text}
+        <br><br>
+        ${p.type}
+      </div>
+    `;
+  });
+}
+
+function renderIdeas(){
+
+  const list =
+    document.getElementById("ideaList");
+
+  list.innerHTML = "";
+
+  ideas.forEach(i => {
+
+    list.innerHTML += `
+      <div class="item">
+        ${i}
+      </div>
+    `;
+  });
+}
+
+</script>.    
+
+</body>
+</html>
