@@ -118,18 +118,43 @@
 
 <script>
 
-let stories = [];
-let points = [];
-let ideas = [];
+let stories =
+JSON.parse(localStorage.getItem("stories")) || [];
+
+let points =
+JSON.parse(localStorage.getItem("points")) || [];
+
+let ideas =
+JSON.parse(localStorage.getItem("ideas")) || [];
+
+function saveData(){
+
+  localStorage.setItem(
+    "stories",
+    JSON.stringify(stories)
+  );
+
+  localStorage.setItem(
+    "points",
+    JSON.stringify(points)
+  );
+
+  localStorage.setItem(
+    "ideas",
+    JSON.stringify(ideas)
+  );
+}
 
 function addStory(){
 
   const input =
-    document.getElementById("storyInput");
+  document.getElementById("storyInput");
 
-  if(!input.value) return;
+  if(!input.value.trim()) return;
 
   stories.push(input.value);
+
+  saveData();
 
   renderStories();
 
@@ -139,20 +164,22 @@ function addStory(){
 function addPoint(){
 
   const input =
-    document.getElementById("pointInput");
+  document.getElementById("pointInput");
 
-  if(!input.value) return;
+  if(!input.value.trim()) return;
 
   const match =
-    stories.some(s =>
-      s.toLowerCase()
-      .includes(input.value.toLowerCase())
-    );
+  stories.some(s =>
+    s.toLowerCase()
+    .includes(input.value.toLowerCase())
+  );
 
   points.push({
     text: input.value,
     type: match ? "MATCH" : "MISMATCH"
   });
+
+  saveData();
 
   renderPoints();
 
@@ -162,29 +189,106 @@ function addPoint(){
 function addIdea(){
 
   const input =
-    document.getElementById("ideaInput");
+  document.getElementById("ideaInput");
 
-  if(!input.value) return;
+  if(!input.value.trim()) return;
 
   ideas.push(input.value);
+
+  saveData();
 
   renderIdeas();
 
   input.value = "";
 }
 
+function moveIdeaToStory(index){
+
+  stories.push(ideas[index]);
+
+  ideas.splice(index,1);
+
+  saveData();
+
+  renderStories();
+
+  renderIdeas();
+}
+
+function moveIdeaToPoints(index){
+
+  const text = ideas[index];
+
+  const match =
+  stories.some(s =>
+    s.toLowerCase()
+    .includes(text.toLowerCase())
+  );
+
+  points.push({
+    text,
+    type: match ? "MATCH" : "MISMATCH"
+  });
+
+  ideas.splice(index,1);
+
+  saveData();
+
+  renderPoints();
+
+  renderIdeas();
+}
+
+function deleteStory(index){
+
+  stories.splice(index,1);
+
+  saveData();
+
+  renderStories();
+}
+
+function deletePoint(index){
+
+  points.splice(index,1);
+
+  saveData();
+
+  renderPoints();
+}
+
+function deleteIdea(index){
+
+  ideas.splice(index,1);
+
+  saveData();
+
+  renderIdeas();
+}
+
 function renderStories(){
 
   const list =
-    document.getElementById("storyList");
+  document.getElementById("storyList");
 
   list.innerHTML = "";
 
-  stories.forEach(s => {
+  stories.forEach((s,index)=>{
 
     list.innerHTML += `
       <div class="item">
+
         ${s}
+
+        <button
+        onclick="deleteStory(${index})"
+        style="
+        margin-top:10px;
+        background:red;
+        color:white;">
+        Delete
+        </button>
+
       </div>
     `;
   });
@@ -193,17 +297,38 @@ function renderStories(){
 function renderPoints(){
 
   const list =
-    document.getElementById("pointList");
+  document.getElementById("pointList");
 
   list.innerHTML = "";
 
-  points.forEach(p => {
+  points.forEach((p,index)=>{
 
     list.innerHTML += `
       <div class="item">
+
         ${p.text}
+
         <br><br>
+
+        <b style="
+        color:
+        ${p.type==="MATCH"
+          ?"lime"
+          :"orange"}">
+
         ${p.type}
+
+        </b>
+
+        <button
+        onclick="deletePoint(${index})"
+        style="
+        margin-top:10px;
+        background:red;
+        color:white;">
+        Delete
+        </button>
+
       </div>
     `;
   });
@@ -212,19 +337,54 @@ function renderPoints(){
 function renderIdeas(){
 
   const list =
-    document.getElementById("ideaList");
+  document.getElementById("ideaList");
 
   list.innerHTML = "";
 
-  ideas.forEach(i => {
+  ideas.forEach((i,index)=>{
 
     list.innerHTML += `
       <div class="item">
+
         ${i}
+
+        <button
+        onclick="moveIdeaToStory(${index})"
+        style="
+        margin-top:10px;
+        background:blue;
+        color:white;">
+        Send To A
+        </button>
+
+        <button
+        onclick="moveIdeaToPoints(${index})"
+        style="
+        margin-top:10px;
+        background:green;
+        color:white;">
+        Send To B
+        </button>
+
+        <button
+        onclick="deleteIdea(${index})"
+        style="
+        margin-top:10px;
+        background:red;
+        color:white;">
+        Delete
+        </button>
+
       </div>
     `;
   });
 }
+
+renderStories();
+
+renderPoints();
+
+renderIdeas();
 
 </script>
 
